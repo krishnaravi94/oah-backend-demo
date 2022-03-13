@@ -17,10 +17,10 @@ class AuthModel extends Database
             $username = $authResult[0]['email'];
 
             $headers = array('alg' => 'HS256', 'typ' => 'JWT');
-            $payload = array('email' => $username, 'exp' => (time() + 60));
+            $payload = array('email' => $username, 'exp' => (time() + 300));
 
             $jwt = generate_jwt($headers, $payload);
-            return json_encode(array('token' => $jwt));
+            return array('jwt_token' => $jwt);
         }
     }
     public function logoutUser()

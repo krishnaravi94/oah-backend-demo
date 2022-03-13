@@ -1,6 +1,6 @@
 <?php
 require __DIR__ . "\inc\bootstrap.php";
-
+// require __DIR__ . "/inc/jwt_utils.php";
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode('/', $uri);
 // echo($_SERVER['REQUEST_URI']);
@@ -14,33 +14,43 @@ if (!isset($uri[2])) {
 require PROJECT_ROOT_PATH . "/controller/api/donation-controller.php";
 require PROJECT_ROOT_PATH . "/controller/api/user-controller.php";
 require PROJECT_ROOT_PATH . "/controller/api/auth-controller.php";
+
+$body = file_get_contents("php://input");
+// Decode the JSON object
+$object = json_decode($body, true);
+
 switch ($uri[2]) {
     case 'donation': {
-            switch ($uri[3]) {
-                case 'list': {
-                        $objFeedController = new DonationController();
-                        $objFeedController->listAction();
-                        break;
-                    }
-                case 'create': {
-                        $objFeedController = new DonationController();
-                        $objFeedController->createAction();
-                        break;
-                    }
-                case 'update': {
-                        $objFeedController = new DonationController();
-                        $objFeedController->updateAction();
-                        break;
-                    }
-                case 'delete': {
-                        $objFeedController = new DonationController();
-                        $objFeedController->deleteAction();
-                        break;
-                    }
-                default:
-                    return;
+            if (is_jwt_valid($object['token'])) {
+                switch ($uri[3]) {
+                    case 'list': {
+                            $objFeedController = new DonationController();
+                            $objFeedController->listAction();
+                            break;
+                        }
+                    case 'create': {
+                            $objFeedController = new DonationController();
+                            $objFeedController->createAction();
+                            break;
+                        }
+                    case 'update': {
+                            $objFeedController = new DonationController();
+                            $objFeedController->updateAction();
+                            break;
+                        }
+                    case 'delete': {
+                            $objFeedController = new DonationController();
+                            $objFeedController->deleteAction();
+                            break;
+                        }
+                    default:
+                        return;
+                }
+                break;
+            } {
+                header('HTTP/1.1 403 Unauthorized User');
+                exit();
             }
-            break;
         }
     case 'user': { {
                 switch ($uri[3]) {

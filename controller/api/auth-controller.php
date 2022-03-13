@@ -5,7 +5,7 @@ class AuthController extends BaseController
 
     // header("Access-Control-Allow-Origin: *");
     // header("Access-Control-Allow-Methods: POST");
-    
+    $resultData='';
     $strErrorDesc = '';
     $requestMethod = $_SERVER["REQUEST_METHOD"];
 
@@ -13,7 +13,8 @@ class AuthController extends BaseController
 
         try{
             $authModel = new AuthModel();
-            $resultToken = $authModel->loginUser();
+            $resultData = $authModel->loginUser();
+            // $responseData = json_encode($resultToken);
         }catch (Error $e){
             $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
             $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -27,11 +28,10 @@ class AuthController extends BaseController
     }
 
     if (!$strErrorDesc) {
-        $this->sendOutput(
-            $resultToken,
+        $this->sendOutput(json_encode($resultData),
             array('Content-Type: application/json', 'HTTP/1.1 200 OK')              
         );
-        echo('The data from the donations table are');
+        // echo('The data from the donations table are');
         // echo($responseData);
     } else {
         $this->sendOutput(json_encode(array('error' => $strErrorDesc)), 

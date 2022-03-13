@@ -6,6 +6,7 @@ class DonationController extends BaseController
      */
     public function listAction()
     {
+        $responseData = '';
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
         // $arrQueryStringParams = $this->getQueryStringParams();
@@ -26,6 +27,7 @@ class DonationController extends BaseController
  
         // send output
         if (!$strErrorDesc) {
+            // print_r($responseData);
             $this->sendOutput(
                 $responseData,
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK')              
