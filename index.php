@@ -18,41 +18,45 @@ require PROJECT_ROOT_PATH . "/controller/api/auth-controller.php";
 $body = file_get_contents("php://input");
 // Decode the JSON object
 $object = json_decode($body, true);
+try {
+    $token = getBearerToken();
+} catch (Error $e) {
+    $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+    $strErrorHeader = 'HTTP/1.1 403 Unauthorized user. Please login with valid credentials.';
+}
 
 switch ($uri[2]) {
     case 'donation': {
-            if (is_jwt_valid($object['token'])) {
+
+            // header("Authorization: Bearer $object['token']");
+            if (checkJwtValidity($token)) {
                 switch ($uri[3]) {
                     case 'list': {
                             $objFeedController = new DonationController();
-                            $objFeedController->listAction();
+                            $objFeedController->getAllDonations();
                             break;
                         }
                     case 'create': {
                             $objFeedController = new DonationController();
-                            $objFeedController->createAction();
+                            $objFeedController->createDonation();
                             break;
                         }
                     case 'update': {
                             $objFeedController = new DonationController();
-                            $objFeedController->updateAction();
-                            break;
-                        }
-                    case 'delete': {
-                            $objFeedController = new DonationController();
-                            $objFeedController->deleteAction();
+                            $objFeedController->updateDonation();
                             break;
                         }
                     default:
                         return;
                 }
                 break;
-            } {
+            } else {
                 header('HTTP/1.1 403 Unauthorized User');
                 exit();
             }
         }
-    case 'user': { {
+    case 'user': {
+            if (checkJwtValidity($token)) {
                 switch ($uri[3]) {
                     case 'list': {
                             $objFeedController = new UserController();
@@ -66,21 +70,20 @@ switch ($uri[2]) {
                         }
                     case 'update': {
                             $objFeedController = new UserController();
-                            $objFeedController->updateUser();
-                            break;
-                        }
-                    case 'delete': {
-                            $objFeedController = new UserController();
-                            $objFeedController->deleteUser();
+                            $objFeedController->updateUserDetails();
                             break;
                         }
                     default:
                         return;
                 }
                 break;
+            } else {
+                header('HTTP/1.1 403 Unauthorized User');
+                exit();
             }
         }
     case 'auth': {
+
             switch ($uri[3]) {
                 case 'login': {
                         $objFeedController = new AuthController();
