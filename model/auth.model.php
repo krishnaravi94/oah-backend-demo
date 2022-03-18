@@ -22,10 +22,10 @@ class AuthModel extends Database
             } else {
                 // $row = $authResult;
     
-                $username = $authResult[0]['email'];
+                $userAccessLevel = $authResult[0]['user_type'];
     
                 $headers = array('alg' => 'HS256', 'typ' => 'JWT');
-                $payload = array('email' => $username, 'exp' => (time() + 7200));
+                $payload = array('accessLevel' => $userAccessLevel, 'exp' => (time() + 7200));
     
                 $jwt = generateJwt($headers, $payload);
                 return array('jwt_token' => $jwt);

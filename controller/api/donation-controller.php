@@ -80,7 +80,7 @@ class DonationController extends BaseController
     /*
     * "/donation/update" Endpoint - update donation
     */
-    public function updateDonation()
+    public function cancelDonation()
     {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
@@ -89,7 +89,7 @@ class DonationController extends BaseController
             try {
                 $donationModel = new DonationModel();
 
-                $donationModel->createDonation();
+                $donationModel->cancelDonation();
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -101,7 +101,7 @@ class DonationController extends BaseController
 
         // send output
         if (!$strErrorDesc) {
-            $this->sendOutput(
+            $this->sendOutput(json_encode(array('message'=>'Donation cancelled')),
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK')
             );
         } else {

@@ -41,9 +41,9 @@ switch ($uri[2]) {
                             $objFeedController->createDonation();
                             break;
                         }
-                    case 'update': {
+                    case 'cancel': {
                             $objFeedController = new DonationController();
-                            $objFeedController->updateDonation();
+                            $objFeedController->cancelDonation();
                             break;
                         }
                     default:
