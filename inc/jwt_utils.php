@@ -47,7 +47,7 @@ function checkJwtAccessLevel($jwt, $secret = 'secret',$minimumLevel) {
 	$payload = base64_decode($tokenParts[1]);
 	$signature_provided = $tokenParts[2];
 
-	// check the expiration time - note this will cause an error if there is no 'exp' claim in the jwt
+	// check the access level of a token - note this will cause an error if there is no 'exp' claim in the jwt
 	$tokenLevel = json_decode($payload)->userAccessLevel;
 	$isTokenValid = $tokenLevel > $minimumLevel;
 

@@ -1,5 +1,5 @@
 <?php
-require_once PROJECT_ROOT_PATH . "\model\database.class.php";
+require_once PROJECT_ROOT_PATH . "/model/database.class.php";
 
 class DonationModel extends Database
 {

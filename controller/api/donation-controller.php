@@ -15,7 +15,9 @@ class DonationController extends BaseController
             try {
                 $donationModel = new DonationModel();
                 $arrDonations = $donationModel->getDonations();
+                // print_r(json_encode($arrDonations));
                 $responseData = json_encode($arrDonations);
+                // echo($responseData);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage() . 'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
